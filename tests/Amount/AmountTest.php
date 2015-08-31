@@ -213,6 +213,7 @@ class AmountTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @covers ::multiplyBy
+   * @covers ::validateNumber
    *
    * @dataProvider providerMultiplyBy
    */
@@ -240,7 +241,32 @@ class AmountTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
+   * @covers ::multiplyBy
+   * @covers ::validateNumber
+   *
+   * @expectedException \InvalidArgumentException
+   *
+   * @dataProvider providerMultiplyByWithInvalidMultiplier
+   */
+  public function testMultiplyByWithInvalidMultiplier($multiplier)
+  {
+    $this->sut->multiplyBy($multiplier);
+  }
+
+  /**
+   * Provides data to self::testMultiplyByWithInvalidMultiplier().
+   */
+  public function providerMultiplyByWithInvalidMultiplier() {
+    return [
+      ['foo'],
+      [TRUE],
+      [new \stdClass()],
+    ];
+  }
+
+  /**
    * @covers ::divideBy
+   * @covers ::validateNumber
    *
    * @dataProvider providerDivideBy
    */
@@ -261,6 +287,31 @@ class AmountTest extends \PHPUnit_Framework_TestCase
       ['1.265000000', '2.53', 2],
       ['1.265000000', '2.53', '2'],
       ['1.000000000', '2.53', '2.53'],
+    ];
+  }
+
+  /**
+   * @covers ::divideBy
+   * @covers ::validateNumber
+   *
+   * @expectedException \InvalidArgumentException
+   *
+   * @dataProvider providerDivideByWithInvalidDivisor
+   */
+  public function testDivideByWithInvalidDivisor($divisor)
+  {
+    $this->sut->divideBy($divisor);
+  }
+
+  /**
+   * Provides data to self::testDivideByWithInvalidDivisor().
+   */
+  public function providerDivideByWithInvalidDivisor() {
+    return [
+      [0],
+      ['foo'],
+      [TRUE],
+      [new \stdClass()],
     ];
   }
 

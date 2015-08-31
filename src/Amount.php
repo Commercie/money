@@ -79,11 +79,30 @@ class Amount implements AmountInterface {
     return new static($this->getCurrency(), bcsub($this->getAmount(), $amount->getAmount(), static::BC_MATH_SCALE));
   }
 
+  /**
+   * Checks that a value is a number.
+   *
+   * @param mixed $number
+   */
+  protected function validateNumber($number) {
+    if (!(is_int($number) || is_string($number) && is_numeric($number))) {
+      $type = is_object($number) ? get_class($number) : gettype($number);
+      throw new \InvalidArgumentException(sprintf('An integer or numeric string was expected, but %s was given.', $type));
+    }
+  }
+
   public function multiplyBy($multiplier) {
+    $this->validateNumber($multiplier);
+
     return new static($this->getCurrency(), bcmul($this->getAmount(), $multiplier, static::BC_MATH_SCALE));
   }
 
   public function divideBy($divisor) {
+    $this->validateNumber($divisor);
+    if ($divisor === 0) {
+      throw new \InvalidArgumentException('The divisor must not be 0 (zero).');
+    }
+
     return new static($this->getCurrency(), bcdiv($this->getAmount(), $divisor, static::BC_MATH_SCALE));
   }
 

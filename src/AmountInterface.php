@@ -58,6 +58,9 @@ interface AmountInterface {
    *   A numeric value.
    *
    * @return static
+   *
+   * @throws \InvalidArgumentException
+   *   Thrown when the divisor isn't a numeric value.
    */
   public function multiplyBy($multiplier);
 
@@ -65,9 +68,12 @@ interface AmountInterface {
    * Divides the amount.
    *
    * @param int|string $divisor
-   *   A numeric value.
+   *   A non-zero numeric value.
    *
    * @return static
+   *
+   * @throws \InvalidArgumentException
+   *   Thrown when the divisor isn't a non-zero numeric value.
    */
   public function divideBy($divisor);
 
